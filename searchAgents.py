@@ -381,89 +381,23 @@ def cornersHeuristic(state, problem):
     current_position, visited_corners = state
     "*** YOUR CODE HERE ***"
     
-    #Manhattan Distance 1 Score: 21920, with p=1/1000 Score: 636(no adminisble)
-    # Calculate Manhattan distance to each remaining corner
+    # Get remaining corners
     remaining_corners = [corner for corner in corners if corner not in visited_corners]
+    # Calculate Manhattan distance to each remaining corner
     manhattan_distances = [abs(current_position[0] - corner[0]) + abs(current_position[1] - corner[1]) for corner in remaining_corners]
 
     # Sum the distances
     total_manhattan_distance = sum(manhattan_distances)
-    #p=1/1000
-    #total_manhattan_distance *= (1.0 + p)
-    #if(total_manhattan_distance<=0):
-    #    print(current_position, total_manhattan_distance)
-    #return total_manhattan_distance
-    
 
-    #chebysnev Distance 1 Score: 1207
-    #chebyshev_distances=[max(abs(current_position[0] - corner[0]), abs(current_position[1] - corner[1]))for corner in remaining_corners]
-    #total_chebyshev_distance = sum(chebyshev_distances)
-    #return total_chebyshev_distance
 
-    #Manhattan Distance 2 score: 347034
-    # Calculate Manhattan distance to each remaining corner
-    #remaining_corners = [corner for corner in corners if corner not in visited_corners]
-    #if remaining_corners:
-    #    closest_corner = min(remaining_corners, key=lambda c: abs(current_position[0] - c[0]) + abs(current_position[1] - c[1]))
-    #    manhattan_distance = abs(current_position[0] - closest_corner[0]) + abs(current_position[1] - closest_corner[1])
-    #else:
-        # If all corners have been visited, heuristic value is 0
-    #    manhattan_distance = 0
-
-    #return manhattan_distance
-
-    #chebysnev Distance 2
-    #remaining_corners = [corner for corner in corners if corner not in visited_corners]
+    #Calculate Chebyshev distance to each remaining corner
     
     chebyshev_distances=[max(abs(current_position[0] - corner[0]), abs(current_position[1] - corner[1]))for corner in remaining_corners]
+    #Sum the distances
     total_chebyshev_distance = sum(chebyshev_distances)
-    #return total_chebyshev_distance
     
+    # Average of the total manhattan distance and total chebyshev distance
     return (total_chebyshev_distance+total_manhattan_distance)/2
-
-    #Random dude on internet
-    # Find the currently furthest corners from the visited corners
-    #furthest_corners = find_furthest_corners(corners, visited_corners)
-    
-    # Check if furthest_corners is None
-    #if furthest_corners == (None, None):
-    #    return 0  # If no unvisited corners left, heuristic value is 0
-    
-    # Calculate Manhattan distance between the currently furthest corners
-    #x = util.manhattanDistance(furthest_corners[0], furthest_corners[1])
-    
-    # Find the closer of the two furthest corners
-    #closer_corner = furthest_corners[0] if util.manhattanDistance(current_position, furthest_corners[0]) < util.manhattanDistance(current_position, furthest_corners[1]) else furthest_corners[1]
-    
-    # Find Manhattan distance from current position to the closer corner
-    #y = util.manhattanDistance(current_position, closer_corner)
-    
-    # Return the sum of x and y as the heuristic value
-    #return x + y
-    
-def find_furthest_corners(corners, visited_corners):
-    """
-    Find the currently furthest corners from the visited corners.
-
-    corners: The corner coordinates
-    visited_corners: The corners already visited
-
-    Returns: A tuple containing the two furthest corners, or (None, None) if there are no unvisited corners left
-    """
-    unvisited_corners = [corner for corner in corners if corner not in visited_corners]
-    if len(unvisited_corners) < 2:
-        return (None, None)  # Not enough unvisited corners
-    else:
-        max_distance = 0
-        furthest_corners = (None, None)
-        for i, corner1 in enumerate(unvisited_corners):
-            for j, corner2 in enumerate(unvisited_corners):
-                if j > i:
-                    distance = util.manhattanDistance(corner1, corner2)
-                    if distance > max_distance:
-                        max_distance = distance
-                        furthest_corners = (corner1, corner2)
-        return furthest_corners
 
 
 class AStarCornersAgent(SearchAgent):
