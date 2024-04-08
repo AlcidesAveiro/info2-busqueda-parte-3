@@ -233,6 +233,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                     g_cost = current_cost + cost  # Calculate the g_cost to reach the next state
                     h_cost = heuristic(next_state, problem)  # Calculate the heuristic cost from the next state to the goal
                     f_cost = g_cost + h_cost  # Calculate the f_cost (total cost)
+                    # Check for inconsistency
+                    successor_h_cost = heuristic(next_state, problem)
+                    if successor_h_cost > h_cost + cost:
+                        print("Inconsistent heuristic at state:", next_state)
                     queue.push((next_state, current_path + [action], g_cost), f_cost)  # Add the next state to the queue with its path and cost
         
         return []  # If goal state not found, return an empty list

@@ -389,15 +389,19 @@ def cornersHeuristic(state, problem):
     # Sum the distances
     total_manhattan_distance = sum(manhattan_distances)
 
-
     #Calculate Chebyshev distance to each remaining corner
-    
     chebyshev_distances=[max(abs(current_position[0] - corner[0]), abs(current_position[1] - corner[1]))for corner in remaining_corners]
     #Sum the distances
     total_chebyshev_distance = sum(chebyshev_distances)
+
+    #Calculate Euclidean distance to each remaining corner
+    euclidean_distances=[( (current_position[0] - corner[0]) ** 2 + (current_position[1] - corner[1]) ** 2 ) ** 0.5 for corner in remaining_corners]
+    #Sum the distances
+    total_euclidean_distance = sum(euclidean_distances)
     
-    # Average of the total manhattan distance and total chebyshev distance
-    return (total_chebyshev_distance+total_manhattan_distance)/2
+   
+    #print(corners)
+    return (total_chebyshev_distance+total_manhattan_distance +total_euclidean_distance)/3
 
 
 class AStarCornersAgent(SearchAgent):
