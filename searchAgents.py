@@ -386,11 +386,30 @@ def cornersHeuristic(state, problem):
     # Calculate Manhattan distance to each remaining corner
     manhattan_distances = [abs(current_position[0] - corner[0]) + abs(current_position[1] - corner[1]) for corner in remaining_corners]
 
+    #if(len(manhattan_distances)):
+    #    min_manhattan = min(manhattan_distances)
+    #    return min_manhattan
+    #return 0
+
+
     # Sum the distances
     total_manhattan_distance = sum(manhattan_distances)
 
     #Calculate Chebyshev distance to each remaining corner
     chebyshev_distances=[max(abs(current_position[0] - corner[0]), abs(current_position[1] - corner[1]))for corner in remaining_corners]
+    
+    if(len(chebyshev_distances)>=2):
+        chebyshev_distances.sort()
+        return chebyshev_distances[0]+chebyshev_distances[1]
+    return chebyshev_distances[0]
+
+    
+
+    if(len(chebyshev_distances)):
+        min_chebyshev = max(chebyshev_distances)
+        return min_chebyshev
+    return 0
+    
     #Sum the distances
     total_chebyshev_distance = sum(chebyshev_distances)
 
@@ -399,8 +418,15 @@ def cornersHeuristic(state, problem):
     #Sum the distances
     total_euclidean_distance = sum(euclidean_distances)
     
-   
+    file_path = "total_manhattan_distance.txt"
+
+    # Open the file in append mode
+    with open(file_path, "a") as file:
+        # Write the total_manhattan_distance to the file, adding a newline character
+        file.write(str((total_manhattan_distance)) + "\n")
     #print(corners)
+    return (total_euclidean_distance)
+    
     return (total_chebyshev_distance+total_manhattan_distance +total_euclidean_distance)/3
 
 

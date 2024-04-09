@@ -98,32 +98,39 @@ def depthFirstSearch(problem):
     s = Directions.SOUTH
     d = Directions.EAST
 
-    path = util.Stack()
-    movement=[]
     
-    def dfs(visited,problem, node):  # Function for DFS
+    def dfs(visited, problem, node, stack, movement):  # Function for DFS
         if problem.isGoalState(node):  # Check if the node is the goal state
             return True  # Indicate that the goal state is found
-    
+
         visited.add(node)
-        
+
         for successor in problem.getSuccessors(node):
             next_state, action, isOpen = successor
             if next_state not in visited:
-                if action=='South' and isOpen==1:
-                    movement.append(s)
-                if action=='North' and isOpen==1:
-                    movement.append(w)
-                if action=='West' and isOpen==1:
-                    movement.append(a)
-                if action=='East' and isOpen==1:
-                    movement.append(d)
-                if dfs(visited, problem, next_state):  # Recursively explore the next state
+                if action == 'South' and isOpen == 1:
+                    stack.push(s)
+                elif action == 'North' and isOpen == 1:
+                    stack.push(w)
+                elif action == 'West' and isOpen == 1:
+                    stack.push(a)
+                elif action == 'East' and isOpen == 1:
+                    stack.push(d)
+
+                if dfs(visited, problem, next_state, stack, movement):  # Recursively explore the next state
                     return True  # If the goal state is found, stop searching
-                movement.pop() # Backtrack by removing the last action from the path
+                if not stack.isEmpty():
+                    stack.pop()  # Backtrack by removing the last action from the path
         return False  # Indicate that the goal state is not found in this branch
 
-    dfs(visited,problem,problem.getStartState())
+    visited = set()
+    stack = util.Stack()
+    movement = []
+
+    dfs(visited, problem, problem.getStartState(), stack, movement)
+    while not stack.isEmpty():
+        movement.insert(0,stack.pop())
+
     print(movement)
     return movement
 
@@ -226,7 +233,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 return current_path  # Return the path to the goal state
             
             visited.add(current_node)
-            
+            current_h=heuristic(current_node,problem)
             for successor in problem.getSuccessors(current_node):
                 next_state, action, cost = successor
                 if next_state not in visited:
@@ -234,9 +241,12 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                     h_cost = heuristic(next_state, problem)  # Calculate the heuristic cost from the next state to the goal
                     f_cost = g_cost + h_cost  # Calculate the f_cost (total cost)
                     # Check for inconsistency
-                    successor_h_cost = heuristic(next_state, problem)
-                    if successor_h_cost > h_cost + cost:
+
+                    if current_h > cost + h_cost:
                         print("Inconsistent heuristic at state:", next_state)
+
+
+
                     queue.push((next_state, current_path + [action], g_cost), f_cost)  # Add the next state to the queue with its path and cost
         
         return []  # If goal state not found, return an empty list
