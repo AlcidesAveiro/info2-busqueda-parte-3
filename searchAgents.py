@@ -381,6 +381,38 @@ def cornersHeuristic(state, problem):
     current_position, visited_corners = state
     "*** YOUR CODE HERE ***"
     
+    def manhattan_distance(p1, p2):
+        return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
+    def closest_unvisited_corner(current_position, visited_corners, corners):
+        closest_corner = None
+        min_distance = float('inf')
+
+        for corner in corners:
+            if corner not in visited_corners:
+                distance = manhattan_distance(current_position, corner)
+                if distance < min_distance:
+                    min_distance = distance
+                    closest_corner = corner
+
+        return closest_corner
+    closest_corner = closest_unvisited_corner(current_position, visited_corners, corners)
+    closestwall = min(abs(current_position[0]-closest_corner[0]), abs(current_position[1]-closest_corner[1]))
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # Get remaining corners
     remaining_corners = [corner for corner in corners if corner not in visited_corners]
     # Calculate Manhattan distance to each remaining corner
@@ -391,6 +423,8 @@ def cornersHeuristic(state, problem):
     #    return min_manhattan
     #return 0
 
+
+    
 
     # Sum the distances
     total_manhattan_distance = sum(manhattan_distances)
