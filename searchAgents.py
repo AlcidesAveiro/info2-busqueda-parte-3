@@ -40,7 +40,7 @@ from game import Actions
 import util
 import time
 import search
-
+import math
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
 
@@ -380,28 +380,49 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
     current_position, visited_corners = state
     "*** YOUR CODE HERE ***"
-    
-    def manhattan_distance(p1, p2):
-        return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
-    def closest_unvisited_corner(current_position, visited_corners, corners):
-        closest_corner = None
-        min_distance = float('inf')
 
-        for corner in corners:
-            if corner not in visited_corners:
-                distance = manhattan_distance(current_position, corner)
-                if distance < min_distance:
-                    min_distance = distance
-                    closest_corner = corner
-
-        return closest_corner
-    closest_corner = closest_unvisited_corner(current_position, visited_corners, corners)
-    closestwall = min(abs(current_position[0]-closest_corner[0]), abs(current_position[1]-closest_corner[1]))
     
 
+    # def manhattan_distance(p1, p2):
+    #     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
+    # def closest_unvisited_corner(current_position, visited_corners, corners):
+    #     closest_corner = None
+    #     min_distance = float('inf')
 
+    #     for corner in corners:
+    #         if corner not in visited_corners and corner!=current_position:
+    #             distance = manhattan_distance(current_position, corner)
+    #             if distance < min_distance:
+    #                 min_distance = distance
+    #                 closest_corner = corner
+
+    #     return closest_corner
+    # primero=0
+    
+    # for corner in corners:
+    #     closest_corner = closest_unvisited_corner(current_position, visited_corners, corners)
+    #     if closest_corner:
+    #         primero =primero + max(abs(current_position[0] - corner[0]), abs(current_position[1] - corner[1]))
+    #         #print(abs(current_position[0] - closest_corner[0]) + abs(current_position[1] - closest_corner[1]))
+
+    #         current_position=closest_corner
+    #         #visited_corners.append(closest_corner)
+    #         visited_corners = visited_corners + (closest_corner,)
+    
+    # file_path = "total_manhattan_distance.txt"
+
+    # # Open the file in append mode
+    # with open(file_path, "a") as file:
+    #     # Write the total_manhattan_distance to the file, adding a newline character
+    #     file.write(str((primero)) + "\n")
+    # #closestwall = min(abs(current_position[0]-closest_corner[0]), abs(current_position[1]-closest_corner[1]))
+    # return primero
+    
+    # #it has to calculat ethe next closet corner that is not un visited already
+    # visited_corners.append(closest_corner)
+    
 
 
 
@@ -418,13 +439,6 @@ def cornersHeuristic(state, problem):
     # Calculate Manhattan distance to each remaining corner
     manhattan_distances = [abs(current_position[0] - corner[0]) + abs(current_position[1] - corner[1]) for corner in remaining_corners]
 
-    #if(len(manhattan_distances)):
-    #    min_manhattan = min(manhattan_distances)
-    #    return min_manhattan
-    #return 0
-
-
-    
 
     # Sum the distances
     total_manhattan_distance = sum(manhattan_distances)
@@ -432,23 +446,14 @@ def cornersHeuristic(state, problem):
     #Calculate Chebyshev distance to each remaining corner
     chebyshev_distances=[max(abs(current_position[0] - corner[0]), abs(current_position[1] - corner[1]))for corner in remaining_corners]
     
-    if(len(chebyshev_distances)>=2):
-        chebyshev_distances.sort()
-        return chebyshev_distances[0]+chebyshev_distances[1]
-    return chebyshev_distances[0]
 
-    
-
-    if(len(chebyshev_distances)):
-        min_chebyshev = max(chebyshev_distances)
-        return min_chebyshev
-    return 0
     
     #Sum the distances
     total_chebyshev_distance = sum(chebyshev_distances)
 
     #Calculate Euclidean distance to each remaining corner
     euclidean_distances=[( (current_position[0] - corner[0]) ** 2 + (current_position[1] - corner[1]) ** 2 ) ** 0.5 for corner in remaining_corners]
+    
     #Sum the distances
     total_euclidean_distance = sum(euclidean_distances)
     
@@ -459,9 +464,11 @@ def cornersHeuristic(state, problem):
         # Write the total_manhattan_distance to the file, adding a newline character
         file.write(str((total_manhattan_distance)) + "\n")
     #print(corners)
-    return (total_euclidean_distance)
+    #return (total_euclidean_distance)
     
-    return (total_chebyshev_distance+total_manhattan_distance +total_euclidean_distance)/3
+    result= (total_chebyshev_distance+total_manhattan_distance +total_euclidean_distance)/3
+    
+    return result
 
 
 class AStarCornersAgent(SearchAgent):
