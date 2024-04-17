@@ -381,6 +381,13 @@ def cornersHeuristic(state, problem):
     current_position, visited_corners = state
     "*** YOUR CODE HERE ***"
 
+    result=0
+    for corner in corners:
+        if corner not in visited_corners:
+            result=result+( (current_position[0] - corner[0]) ** 2 + (current_position[1] - corner[1]) ** 2 ) ** 0.5
+            current_position=corner
+            visited_corners = visited_corners + (corner,)
+    return result
 
     
 
